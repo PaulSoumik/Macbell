@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+
+
+	<div class="container">
+		{% if companyexist %}
+			
+		
+			{% if addpossible %}
+				<form method="POST" action="{% url 'forms:addproduct' %}">
+					{% csrf_token %}
+					<p><label for="id_Prod_name">Prod name:</label> 
+						<input type="text" name="Prod_name" maxlength="200" id="id_Prod_name">
+					</p>
+					<p><label for="id_product_pic">Product pic:</label> 
+						<input type="file" name="product_pic" accept="image/*" id="id_product_pic">
+					</p>
+					<p><label for="id_Description">Description:</label> 
+						<input type="text" name="Description" maxlength="300" id="id_Description">
+					</p>
+					<input type="submit" name="">
+				</form>
+			{% else %}
+				<h1>Reached maximum limit of products.</h1>
+			{% endif %}
+		{% else %}
+			<h1>Please Create your company first.</h1>
+		{% endif %}
+		{% if thatexist == 0 %}
+			<h1>Product Already exists</h1>
+		{% elif thatexist == 2 %}
+			<h1>Product saved</h1>
+		{% elif thatexist == 1 and addpossible %}
+			<h1>Save a new product</h1>
+		{% endif %}
+	</div>
+
+</body>
+</html>

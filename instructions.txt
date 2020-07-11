@@ -1,0 +1,23 @@
+Django Part is in BackEnd folder
+Angular Part in FrontEnd folder
+
+To run Backend,
+    In the Macbell folder, run the following commands (only for first run)
+    python -m venv env 
+    cd env/Scripts
+    activate
+    cd ../..
+    pip install -r requirements.txt
+    python manage.py runserver
+
+    In the Macbell folder, run the following commands (for using)
+    python -m venv env 
+    cd env/Scripts
+    activate
+    cd ../..
+    python manage.py runserver
+
+To run FrontEnd,
+    npm install (for first run)
+    cd FrontEnd
+    ng serve

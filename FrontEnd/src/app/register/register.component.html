@@ -1,0 +1,71 @@
+<div class="card register-card" *ngIf = "step1">
+    <h4 class="card-header">Register</h4>
+    <div class="card-body">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            <div class="form-group">
+                <label for="firstName">First Name</label>
+                <input type="text" formControlName="firstName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }" />
+                <div *ngIf="submitted && f.firstName.errors" class="invalid-feedback">
+                    <div *ngIf="f.firstName.errors.required">First Name is required</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="lastName">Last Name</label>
+                <input type="text" formControlName="lastName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }" />
+                <div *ngIf="submitted && f.lastName.errors" class="invalid-feedback">
+                    <div *ngIf="f.lastName.errors.required">Last Name is required</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="username">Email</label>
+                <input type="text" formControlName="email" ngModel email="true" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.email.errors }" />
+                <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+                    <div *ngIf="f.email.errors.required">Email is required</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" formControlName="password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
+                <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+                    <div *ngIf="f.password.errors.required">Password is required</div>
+                    <div *ngIf="f.password.errors.minlength">Password must be at least 6 characters</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="category">I'm</label>
+                <select id="category" formControlName='category' name="category" class="form-control input-lg" (change)="changeProfileType($event.target.value)">
+                    <option *ngFor = "let type of profileTypes | keyvalue" value = {{type.key}}> {{type.key | titlecase}}</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="profileType">Create Profile as</label>
+                <select id="profileType" formControlName='profileType' name="profileType" class="form-control input-lg">
+                    <option *ngFor = 'let profile of profiles' value = {{profile}}> {{profile | titlecase}}</option>
+                </select>
+            </div>
+            <!-- <div class="form-group">
+                <label for="address">Address</label>
+                <textarea type="text" rows="3" formControlName="address" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.address.errors }"> </textarea>
+                <div *ngIf="submitted && f.address.errors" class="invalid-feedback">
+                    <div *ngIf="f.address.errors.required"> is required</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="contact">Contact No.</label>
+                <input type="text" formControlName="contact" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.contact.errors }" />
+                <div *ngIf="submitted && f.contact.errors" class="invalid-feedback">
+                    <div *ngIf="f.contact.errors.required"> is required</div>
+                    <div *ngIf = "f.contact.errors.minlength"> Contact Number invalid </div>
+                </div>
+            </div> -->
+
+            <div class="form-group">
+                <button [disabled]="loading" class="btn btn-primary float-right">
+                    <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                    Register
+                </button>
+                <a routerLink="../home" class="btn btn-link">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>

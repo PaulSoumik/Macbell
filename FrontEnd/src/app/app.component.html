@@ -1,0 +1,44 @@
+  <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e8f4f8;">
+    <div class="float-left">
+        <h2><a class="navbar-brand" href="#"><strong>Macbell</strong></a></h2>
+    </div>
+   
+    <div>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <form class="form-inline">
+            <input class="form-control mr-sm-2" type="search" placeholder="" aria-label="Search">
+            <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
+            </form> 
+            <ul class="navbar-nav">
+            <li class="nav-item active">
+                <a class="nav-link" routerLink="/home" routerLinkActive="active">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link disabled" href="#" style="width:100%;">Get Verified</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Contact</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Member</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Story</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" routerLink="/login" routerLinkActive="active">Login</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" routerLink="/register" routerLinkActive="active" >Create Profile</a>
+            </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<br>
+
+<router-outlet> </router-outlet>
