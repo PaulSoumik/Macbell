@@ -9,14 +9,37 @@
 
 
     <style> 
-       
+       body{
+       	font-family: monospace;
+       	margin: 0;
+       	padding: 0;
+       }
+       header{
+       	padding: 1rem 0;
+       	background: black;
+       	margin:0px;
+
+
+       }
+       header nav{
+       	padding-right: 1rem;
+       	padding-bottom: 0.5rem;
+       }
+       header nav ul li{
+       	padding-left: 10px;
+       	list-style: none;
+       	color: white !important;
+       }
+       header nav ul li a{
+       	color: #fff;
+       }
     </style> 
 </head>
 <body>
 
 	<header>
 		<nav>
-			<ul>
+			<ul style="display: flex;">
 				<li><a href="#">home</a></li>
 				
 				{% if not user.is_authenticated %}
@@ -27,6 +50,7 @@
 				<li><a href="{% url 'forms:logout' %}">logout</a></li>
 				<li><a href="{% url 'forms:cofndprofile' %}">Co-founder profile</a></li>
 				<li><a href="{% url 'forms:addproduct' %}">Add Products</a></li>
+				<li><a href="{% url 'forms:createjob' %}">Create Job</a></li>
 					{% if cmp_reg %}
 					<li><a href="{% url 'forms:Company_profile' %}">Register Company</a></li>
 					{% endif %}
@@ -36,11 +60,70 @@
 		</nav>
 	</header>
 
-	<div class="container">
+	<div class="container" style="padding: 2rem;">
 		{% if user.is_authenticated %}
 		      <h1>welcome {{ user.username }}</h1>
 		 {% endif %}
 	</div>
+
+	{% if user.is_authenticated %}
+	<div class="container" style="display: flex; flex-direction: row;padding-left: 2rem; padding-bottom: 1rem;">
+		{% for product in CmpProducts.all %}
+		<div class="card" style="width: 30vw; max-height: 50%; text-align: center;">
+			<h3>{{ product.Prod_name}}</h3>
+
+			<p>{{ product.Description }}</p>
+			<a href="{% url 'forms:editproductdetails' product.pk %}"> edit details</a>
+		</div>
+		{% endfor %}
+	</div>
+
+
+	<table>
+		<ul style="padding-left: 2rem;">
+		{% if isjobsavailable > 0 %}
+			
+			<h1 style="font-family: monospace;">Jobs/Interships Available:</h1>
+			{% for job in jobsavailable %}
+			<li style="display: block; list-style: none;width: 90%; font-family: monospace;">
+				<h2> {{ job.JobTilte }} </h2>
+				<div class="flex_display" style="display: grid; grid-template-columns: 1fr 1fr 1fr;">
+					<h4 style="font-weight: 200;"> {{ job.Location }}</h4>
+					<h4 style="font-weight: 200;">{{ job.JobType }}</h4>
+					<h4 style="font-weight: 200;">Last Date: {{ job.Last_date|date }}</h4>
+				</div>
+				<div style="display: grid; grid-template-columns: 1fr 1fr 1fr;">	
+						<p>Company: {{ job.ForCompany }}</p>
+						<p>Job Posted by <font style="font-weight: 800; text-transform: uppercase;">{{ job.ForCompany.user.username }}</font></p>
+						<div class="button" style="display: block; text-decoration: underline;"><a href="{% url 'forms:joobapplication' job.pk %}" style="text-decoration: none;"> Apply </a></div>	
+				</div>
+
+			</li>
+			{% endfor %}
+		{% endif %}
+		</ul>
+	</table>
+
+
+	<table >
+		<h1 style="font-family: monospace;padding-left: 2rem;">Jobs/Interships Applicants:</h1>
+		{% for job in usercreatedjobs %}
+		<section style="padding-left: 2rem;">
+			<h2> {{ job.JobTilte }} </h2>
+				<div class="flex_display" style="display: grid; grid-template-columns: 1fr 1fr 1fr;">
+					<h4 style="font-weight: 200;"> {{ job.Location }}</h4>
+					<h4 style="font-weight: 200;">{{ job.JobType }}</h4>
+					<h4 style="font-weight: 200;">Last Date : {{ job.Last_date|date }}</h4>
+				</div>
+				<div style="display: grid; grid-template-columns: 1fr 1fr 1fr;">	
+						<p>Company: {{ job.ForCompany }}</p>
+						<div class="button" style="display: block; text-decoration: underline;"><a href="{% url 'forms:applicantslist' job.pk %}" style="text-decoration: none;"> Check Applicants </a></div>	
+				</div>
+
+		</section>
+		{% endfor %}
+	</table>
+	{% endif %}
 
 	
 </script>

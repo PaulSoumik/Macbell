@@ -13,11 +13,44 @@
         <h3>Just fill out the form.</h3>
       <form enctype="multipart/form-data" method="POST">
           {% csrf_token %}
-          {{ user_form.as_p }}
-          {% if flag == 0 %}
-              <h4>This mail adress is already used!</h4>
-          {% endif %}
-          {{ profile_form.as_p }}
+          <p><label for="id_username">Username:</label> <input type="text" name="username" maxlength="150" required="" id="id_username"> <span class="helptext">Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.</span></p>
+          <p><label for="id_password">Password:</label> <input type="password" name="password" required="" id="id_password"></p>
+          <p><label for="id_email">Email address:</label> <input type="email" name="email" maxlength="254" id="id_email"></p>
+          
+          <p><label for="id_about">About:</label> 
+            <select name="about" id="id_about">
+                    <option value="" selected="">---------</option>
+
+                    <option value="student">student</option>
+
+                    <option value="enterpreneur">enterpreneur</option>
+
+                    <option value="Businessman">Businessman</option>
+
+            </select></p>
+          <p><label for="id_profile_as">Profile as:</label> <select name="profile_as" id="id_profile_as">
+                      <option value="" selected="">---------</option>
+
+                      <option value="student">student</option>
+
+                      <option value="enterpreneur">enterpreneur</option>
+
+                      <option value="Businessman">Businessman</option>
+
+                      <option value="Investor">Investor</option>
+
+                      <option value="Freelancers">Freelancers</option>
+
+                      <option value="Student Enterpreneur">Student Enterpreneur</option>
+
+                      </select></p>
+          <p><label for="id_profile_pic">Profile pic:</label> <input type="file" name="profile_pic" accept="image/*" id="id_profile_pic"></p>
+          <p><label for="id_Address">Address:</label> <textarea name="Address" cols="40" rows="10" maxlength="400" id="id_Address"></textarea></p>
+          <p><label for="id_Contact">Contact:</label> <input type="number" name="Contact" min="-9223372036854775808" max="9223372036854775807" id="id_Contact"></p>
+          <p><label for="id_Country">Country:</label> <input type="text" name="Country" maxlength="100" id="id_Country"></p>
+          <p><label for="id_City">City:</label> <input type="text" name="City" maxlength="100" id="id_City"></p>
+
+
           <input type="submit" name="" value="Register" class="regis-sub"">
         </form>
         

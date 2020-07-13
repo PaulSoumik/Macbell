@@ -79,7 +79,7 @@ WSGI_APPLICATION = 'BackEnd.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'macbellindb',
+        'NAME': 'macbelldatabase',
         'USER': 'macbellin' ,
         'PASSWORD' : 'macbell123' ,
         'HOST' : '127.0.0.1' ,

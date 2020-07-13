@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+
+	<form action=""  method="POST" >
+					{% csrf_token %}
+					<p><label for="id_Prod_name">Prod name:</label> 
+						<input type="text" name="Prod_name" maxlength="200" id="id_Prod_name" value="{{ theproduct.Prod_name }}">
+					</p>
+					<p><label for="id_product_pic">Product pic:</label> 
+						<input type="file" name="product_pic" accept="image/*" id="id_product_pic">
+					</p>
+					<p><label for="id_Description">Description:</label> 
+						<input type="text" name="Description" maxlength="300" id="id_Description" value="{{ theproduct.Description }}">
+					</p>
+					<input type="submit" name="">
+	</form>
+</body>
+</html>

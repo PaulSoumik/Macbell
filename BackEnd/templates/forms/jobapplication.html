@@ -1,0 +1,67 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+
+
+    <script type="text/javascript">
+    	function addnew(){
+    		
+
+    	}
+
+	</script>
+</head>
+<body>
+	
+	<form action="" method="POST">
+		{% csrf_token %}
+		<table class="no-error">
+			{{ jobapplyform }}
+		</table>
+		<h3>Work profile</h3>
+
+		<div class="work_profile">
+		{{ workset.management_form }}
+		{% for form in workset.forms %}
+			{{ form.errors }}
+			<table class="no-error">
+				{{form}}
+			</table>
+			
+		{% endfor %}
+
+		</div>
+		<div class="addmore" id="clicktoadd" onclick="addnew()" style="cursor: pointer; text-decoration: underline;">Add new educational details</div>
+		<div id="empty_work_form" style="display: none;">
+			<table class="no_error">
+				{{ workset.empty_form }}
+			</table>
+		</div>
+		<input type="submit" name="">
+	</form>
+	
+
+
+		
+
+
+
+
+
+
+<script type="text/javascript">
+	var edunum = 1;
+	function myfunc() {
+		var form_idx = $('#id_form-TOTAL_FORMS').val();
+		$('.work_profile').append($('#empty_work_form').html().replace(/__prefix__/g, form_idx));
+		$('#id_form-TOTAL_FORMS').val(parseInt(form_idx) +1);
+	}
+	document.getElementById("clicktoadd").addEventListener("click",myfunc);
+</script>
+	
+</body>
+</html>

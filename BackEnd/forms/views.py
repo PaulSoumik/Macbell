@@ -1,9 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 import json
 # Create your views here.
 
-from forms.models import CofndProfile,EduDetails,CompanyBase,SKILLS,Products
-from forms.forms import CofndProfileForm,EduDetailsform,UserForm,UserProfileForm,CompanyBaseForm,CompanyInfoForm,ProductForm
+from forms.models import CofndProfile,EduDetails,CompanyBase,Products,SKILLS,JobApplication,JobOpening,WorkProfile
+from forms.forms import CofndProfileForm,EduDetailsform,UserForm,UserProfileForm,CompanyBaseForm,CompanyInfoForm,ProductForm,JobOpeningForm,WorkProfileForm,WorkProfileFormset,JobApplicationForm
 from django.core import serializers
 from django.contrib.auth.decorators import login_required
 
@@ -14,25 +14,45 @@ from django.urls import reverse
 
 from django.views import generic
 
+
+#Skills = []
 Skills = SKILLS.objects.all()
 #skills_js = serializers.serialize('json',Skills);
 #skills_js = json.dumps(Skills)
 skillsall = []
+
 for theskill in Skills.all():
 	skillsall.append(theskill.name)
 
 def index(request):
+	CmpProducts = []
 	cmp_reg = False;
+	jobsavailable = []
+	usercreatedjobs = []
 	if request.user.is_authenticated:
 		try:
 			usercompany = CompanyBase.objects.get(user_id = request.user.id)
+			print(usercompany)
 		except CompanyBase.DoesNotExist:
 			usercompany = None
 		if usercompany:
 			cmp_reg= False
+			CmpProducts = Products.objects.filter(productcompany_id = usercompany.id)
 		else:
 			cmp_reg = True
-	return render(request,'forms/index.html',{'cmp_reg':cmp_reg})
+		try:
+			jobsavailable = []
+			for job in JobOpening.objects.filter(valid= True):
+				if job.ForCompany.user != request.user:
+					jobsavailable.append(job)
+					print(job)
+				else:
+					usercreatedjobs.append(job)
+					print("user created job",job)
+		except JobOpening.DoesNotExist:
+			jobsavailable = None
+	isjobsavailable = len(jobsavailable)
+	return render(request,'forms/index.html',{'cmp_reg':cmp_reg,'CmpProducts':CmpProducts,'isjobsavailable':isjobsavailable,'jobsavailable':jobsavailable,'usercreatedjobs':usercreatedjobs})
 
 
 @login_required
@@ -134,10 +154,34 @@ def Userlogin(request):
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 @login_required
 def user_logout(request):
     logout(request)
     return HttpResponseRedirect(reverse('index'))
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -195,18 +239,31 @@ def CompanyProfile(request):
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 product_limit = 20;
 @login_required
 def addProduct(request):
 	addpossible = True
 	companyexist = True
 	thatexist = 1
+	company_is = None
 	product_form = ProductForm()
 	User = get_user_model()
 	useris = User.objects.get(username = request.user.username)
 	try:
 		company_is = CompanyBase.objects.get(user_id = useris.id)
-	except company_is.DoesNotExist:
+	except CompanyBase.DoesNotExist:
 		company_is = None
 		companyexist = False
 		return render(request, 'forms/addproduct.html',{'product_form' : product_form,'thatexist':thatexist,'companyexist':companyexist,'addpossible':addpossible})
@@ -238,3 +295,137 @@ def addProduct(request):
 
 	product_form = ProductForm()
 	return render(request, 'forms/addproduct.html',{'product_form' : product_form,'thatexist':thatexist,'companyexist':companyexist,'addpossible':addpossible})
+
+
+
+
+def editproddetails(request, pk):
+	theproduct = None
+	print(pk)
+	theproduct = get_object_or_404(Products,pk=pk)
+	print(pk)
+	print(theproduct)
+	response ={}
+	response['productid'] = theproduct.id
+	product_form = ProductForm(request.POST or None, instance= theproduct)
+	print(product_form)
+	if product_form.is_valid():
+		prodname = request.POST['Prod_name']
+		proddesc = request.POST['Description']
+		print(prodname,proddesc)
+		theproduct = product_form.save(commit=False)
+		theproduct.save()
+		return render(request, 'forms/editdone.html')
+	else:
+		print("not post")
+		#return render(request, 'forms/editdone.html')Prod_name = theproduct.Prod_name,Description = theproduct.Description
+	product_form = ProductForm()
+	return render(request, 'forms/editproduct.html',{'product_form' : product_form,'theproduct':theproduct},response)
+
+
+
+
+
+
+
+
+
+
+
+
+
+@login_required
+def CreateJob(request):
+	jobform = JobOpeningForm()
+	companynotfound = False
+	User = get_user_model()
+	useris = User.objects.get(username = request.user.username)
+	if request.method == "POST":
+		jobformdata = JobOpeningForm(data= request.POST)
+		print(jobformdata)
+		print("job data is: ")
+		company_is = None
+		try:
+			company_is = CompanyBase.objects.get(user_id = useris.id)
+		except CompanyBase.DoesNotExist:
+			company_is = None
+		if jobformdata.is_valid():
+			newjob = jobformdata.save(commit=False)
+			if company_is == None:
+				companynotfound = True
+				return render(request, 'forms/createjob.html',{'jobform':jobform,'Skills' : Skills,'companynotfound':companynotfound})
+			newjob.ForCompany = company_is
+			newjob.save()
+			jobformdata.save_m2m()
+
+	return render(request, 'forms/createjob.html',{'jobform':jobform,'Skills' : Skills,'companynotfound':companynotfound})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@login_required
+def applyforjob(request , pk):
+	User = get_user_model()
+	useris = User.objects.get(username = request.user.username)
+	pass
+	if request.method == "GET":
+		jobapplyform = JobApplicationForm(request.GET or None)
+		workset = WorkProfileFormset(request.GET or None)
+	elif request.method == "POST":
+		jobapplyformdata = JobApplicationForm(request.POST)
+		worksetdata = WorkProfileFormset(request.POST)
+		jobdetails = JobOpening.objects.get(pk = pk)
+		if jobapplyformdata.is_valid() and worksetdata.is_valid():
+			jobapplication = jobapplyformdata.save(commit=False)
+			jobapplication.applicant = useris
+			jobapplication.jobtilte = jobdetails
+			jobapplication.save()
+			jobapplications = JobApplication.objects.filter(jobtilte= jobapplication.jobtilte)
+			thejobapplication = jobapplications.get(applicant = jobapplication.applicant)
+			print(thejobapplication.id, thejobapplication)
+			print(type(thejobapplication.id))
+			for work in worksetdata:
+				print(work)
+				workprofile = work.save(commit=False)
+				workprofile.jobapplication = thejobapplication
+				workprofile.save()
+				print("work saved:", workprofile.Company_name )
+			print("jobapplication saved:", jobapplication.applicant)
+
+	jobapplyform = JobApplicationForm()
+	workset = WorkProfileFormset()
+
+	return render(request, 'forms/jobapplication.html', {'jobapplyform':jobapplyform, 'workset': workset})
+
+
+
+@login_required
+def applicants(request, pk):
+	jobdetails = JobOpening.objects.get(pk = pk)
+	alljobapplications = JobApplication.objects.filter(jobtilte = jobdetails)
+
+
+
+	return render(request, 'forms/listapplicants.html',{'jobdetails':jobdetails,'alljobapplications':alljobapplications})
+
+
+
+@login_required
+def fullapplication(request , pk):
+	fulljobapplication = JobApplication.objects.get(pk = pk)
+	workexp = WorkProfile.objects.filter(jobapplication= fulljobapplication)
+
+	return render(request, 'forms/fullapplication.html',{'fulljobapplication':fulljobapplication,'workexp':workexp})

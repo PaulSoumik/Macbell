@@ -13,7 +13,12 @@ urlpatterns=[
     url(r'^login/$',views.Userlogin,name='login'),
     url(r'^$',views.user_logout,name='logout'),
     url(r'^Company_profile/$',views.CompanyProfile,name='Company_profile'),
-    url(r'^Add_Products/$',views.addProduct,name='addproduct')
+    url(r'^Add_Products/$',views.addProduct,name='addproduct'),
+    url(r'^CreateJob/$',views.CreateJob,name='createjob'),
+    url(r'^productedit/(?P<pk>.*)/$',views.editproddetails,name='editproductdetails'),
+    url(r'^JobApplication/(?P<pk>.*)/$',views.applyforjob,name='joobapplication'),
+    url(r'^ApplicantsList/(?P<pk>.*)/$',views.applicants,name='applicantslist'),
+    url(r'^FullApplication/(?P<pk>.*)/$',views.fullapplication,name='fullapplication')
     ]
 
 

@@ -1,10 +1,10 @@
 from django import forms
-from forms.models import CofndProfile,EduDetails,UserProfile,CompanyBase,CompanyInfo,SKILLS,Products
-
+from forms.models import CofndProfile,EduDetails,UserProfile,CompanyBase,CompanyInfo,Products,JobOpening,SKILLS,JobApplication,WorkProfile
+from django.forms import formset_factory
 class CofndProfileForm(forms.ModelForm):
      class Meta():
          model = CofndProfile
-         fields = ('yourself','looking_for','industry','join_as','name','employment','college_name','course_name','passing_year','grade','skills')
+         fields = ('yourself','looking_for','industry','join_as','name','employment','college_name','course_name','passing_year','grade','skills')#
 
 class skillform(object):
 	class Meta():
@@ -65,3 +65,41 @@ class ProductForm(forms.ModelForm):
 	class Meta():
 		model = Products
 		fields = ('Prod_name','product_pic','Description')
+
+
+
+
+
+
+
+class JobOpeningForm(forms.ModelForm):
+	class Meta():
+		model = JobOpening
+		fields = ('JobTilte','Location','JobType','experience','Last_date','valid','reqskills')#
+
+
+
+
+class JobApplicationForm(forms.ModelForm):
+	class Meta():
+		model = JobApplication
+		fields = ('applyas','college_name','course_name','passing_year','grade','aboutapplicant')
+
+
+class WorkProfileForm(forms.ModelForm):
+	class Meta():
+		model = WorkProfile
+		fields = ('Company_name','Post','Start_date','end_date')
+
+
+
+WorkProfileFormset = formset_factory(WorkProfileForm, extra =1)
+
+
+
+
+
+
+
+
+
